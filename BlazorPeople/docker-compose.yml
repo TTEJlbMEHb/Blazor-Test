@@ -1,0 +1,25 @@
+version: '3.4'
+
+networks:
+  demoblazorapp:
+
+services:
+  SqlServerDb:
+    container_name: blazor-db
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 8002:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=myStong_Password123# 
+
+  blazorpeople:
+    container_name: blazor-app
+    image: ${DOCKER_REGISTRY-}blazorpeople
+    build:
+      context: .
+      dockerfile: BlazorPeople/Dockerfile
+    ports:
+      - 8001:80
+    depends_on:
+      - SqlServerDb
